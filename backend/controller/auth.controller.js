@@ -1,6 +1,7 @@
 import z from "zod";
 import bcrypt from "bcryptjs";
 import User from "../db/model/user.model.js";
+import { generateTokenAndSetCookie } from "../utils/genrateToken.js";
 export const SignUp = async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -70,6 +71,9 @@ export const SignUp = async (req, res) => {
       password: passwordHash,
       image,
     });
+
+    generateTokenAndSetCookie(user._id, res);
+
     return res.status(201).json({
       success: true,
       message: "User created successfully",
